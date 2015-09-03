@@ -52,11 +52,11 @@ Markov: stores and structures the data
 		then (in the each-token loop) append this token to prev,
 		remove the head of prev if it's too long,
 		and repeat until the token stream is empty
-	load: takes filename, import model from filename,
+	load: takes filename, deserialize model from filename,
 		parse import to get n, self.data (prefix-length, hash),
 		set self.n to min (n, self.n) and print if changed,
 		do this under try-except for safety
-	dump: takes filename, stores (self, self.data) to filename,
+	dump: takes filename, serializes (self, self.data) to filename,
 		do this under try-except for safety
 	reset: takes seed (new random seed), 
 			prob (chance to choose random token), 
