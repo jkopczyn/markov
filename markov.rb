@@ -11,17 +11,24 @@ class Markov
     @final_clear_length = prefix_size
   end
 
-  def load
-    #add try-except
-    #read from a file to 'serialized'
-    copy, @data = Marshal::load(serialized)
-    #self = copy ?? probably doesn't work
+  def load(filename)
+    begin
+      serialized = nil
+      data_store = File.open(filename, 'r')
+      copy, @data = Marshal::load(data_store.read)
+      data_store.close
+    rescue 
+      puts "Could not save to file #{filename}."
+    end
   end
 
-  def dump
-    #add try-except
-    serialized = Marshal::dump(@prefix_size, @data)
-    #write this to a file
+  def dump(filename)
+    begin
+      serialized = Marshal::dump(@prefix_size, @data)
+      File.open(filename, 'w'){ |file| file.print(serialized) }
+    rescue 
+      puts "Could not read from file #{filename}."
+    end
   end
 
 end
