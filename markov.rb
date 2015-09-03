@@ -1,4 +1,4 @@
-require "yaml"
+#require "yaml"
 
 class Markov
 
@@ -14,13 +14,13 @@ class Markov
   def load
     #add try-except
     #read from a file to 'serialized'
-    copy, @data = YAML::load(serialized)
+    copy, @data = Marshal::load(serialized)
     #self = copy ?? probably doesn't work
   end
 
   def dump
     #add try-except
-    serialized = YAML::dump(@prefix_size, @data)
+    serialized = Marshal::dump(@prefix_size, @data)
     #write this to a file
   end
 
