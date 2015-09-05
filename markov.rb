@@ -88,4 +88,37 @@ class Markov
       return next_token
     end
   end
+
+  def last_state_saturated
+    return false unless @recent_data.include?(@previous_tokens)
+    @recent_data[@previous_tokens] > @data[@previous_tokens][0]
+  end
+
+  def clean_recent_data
+    @recent_data = {}
+  end
+
+  private
+  def select_token(state=nil)
+    state ||= @previous_tokens
+    @recent_data[state] ||= 0
+    @recent_data[state] += 1
+    choose(@data[state])
+  end
+  def choose(freqdict)
+    total_count, choice_hash = freqdict
+    idx = rand(0...total_count)
+    choice_hash.each_pair do |token, occurences|
+      return token if idx < occurences
+      idx -= occurences
+    end
+  end
 end
+#{a: 2, b: 4, c: 1, d: 6}
+#13, <=
+#8-13 -> 11 > 7 > 6
+#0-2 > a (3)
+#13, <
+#0-1 > a (2)
+#
+
