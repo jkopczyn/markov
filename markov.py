@@ -106,10 +106,10 @@ class Markov:
 
     def _choose(self, freqdict):
         total, choices = freqdict
-        idx = random.randrange(total)
+        idx = random.randrange(total-1)
 
         for token, freq in choices.items():
-            if idx <= freq:
+            if idx < freq:
                 return token
 
             idx -= freq
