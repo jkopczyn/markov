@@ -1,6 +1,9 @@
 require 'random'
+require 'set'
 
 class Markov
+
+  CLAUSE_ENDS = Set.new([',', '.', ';', ':'])
 
   def initialize(prefix_size=3)
     @prefix_size = prefix_size
@@ -61,5 +64,28 @@ class Markov
     @seed = options.seed if options.seed
     @probability_of_random = options.prob if options.prob
     @previous_tokens = options.previous if options.previous
+    set_clear_length(options.final_clear_length) if options.final_clear_length
+    clean_recent_data
+    srand(@seed)
+  end
+
+  def yield_token
+    while true:
+      if @previous_tokens == [] or rand < @probability_of_random:
+        next_token = select_token([])
+      else:
+        begin
+          next_token = select_token(@previous_tokens)
+        rescue
+        @previous_tokens = []
+        next_token = select_token([])
+        end
+      end
+      @previous_tokens = (@previous_tokens + [next_token])[-@prefix_size..-1]
+      if CLAUSE_ENDS.include?(next_token[-1]):
+        @previous_tokens = @previous_tokens[-@final_clear_length..-1]
+      end
+      return next_token
+    end
   end
 end
