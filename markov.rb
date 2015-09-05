@@ -2,8 +2,8 @@ require 'random'
 require 'set'
 
 class Markov
-
-  CLAUSE_ENDS = Set.new([',', '.', ';', ':'])
+  
+  CLAUSE_ENDS = Set.new([:",", :".", :";", :":"])
 
   def initialize(prefix_size=3)
     @prefix_size = prefix_size

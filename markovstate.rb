@@ -53,6 +53,40 @@ class MarkovState
       options.previous = options.previous[-@markov.previous_tokens..-1]
       puts "Truncating prefix to #{options.previous}"
     end
-    reset(options)
+    @markov.reset(options)
+
+    
+    options.initial_skip.times do
+      next_token = @markov.yield_token
+    end
+    
+    until options.start_condition.call(next_token)
+      next_token = @markov.yield_token
+    end
+
+    enum = Enumerator.new do |y|
+      y.yield @markov.yield_token
+    end
+
+    @generator = lambda { |n|
+      output = []
+      while n > 0
+        output << next_token
+        if options.end_condition.call(next_token) or @markov.last_state_saturated
+          n -= 1
+          @markov.clean_recent_data
+        end
+        next_token = enum.first
+      end
+      return ' '.join(output[0..(-1-options.final_discard)])
+    }
+
+    @generator.call(chunks)
   end
+
+  def more(chunks=1)
+    throw "No markov chain loaded!" unless @markov
+    @generator.call(chunks)
+  end
+
 end
