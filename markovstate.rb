@@ -8,14 +8,21 @@ class MarkovState
   end
 
   def load(filename)
+    @generator = nil
+    @markov = Markov.new
+    @markov.load(filename)
   end
 
-  def save(filename)
+  def dump(filename)
+    if @markov
+      @markov.dump(filename)
+    else
+      puts "No Markov chain loaded!"
   end
 
   def train(prefix_length, filename, options)
     @markov = Markov.new(prefix_length)
-    File.open(filename) do |f|
+    File.open(filename, 'r') do |f|
       enumerator = f.each_line.lazy.map(&:split)
       if options.noparagraphs
         enumerator = enumerator.inject(&:+).map(&:to_sym)

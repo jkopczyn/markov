@@ -42,12 +42,15 @@ class Markov
 
   def load(filename)
     begin
-      serialized = nil
-      data_store = File.open(filename, 'r')
-      copy, @data = Marshal::load(data_store.read)
-      data_store.close
+      File.open(filename, 'r') do |f|
+        prefix, @data = Marshal::load(f.read)
+        puts "Now using #{[prefix,@prefix_size].min}-word prefixes"
+        @prefix_size = [prefix, @prefix_size].min
+        return true
+      end
     rescue 
-      puts "Could not save to file #{filename}."
+      puts "Could not read from file #{filename}."
+      return false
     end
   end
 
@@ -55,8 +58,10 @@ class Markov
     begin
       serialized = Marshal::dump(@prefix_size, @data)
       File.open(filename, 'w'){ |file| file.print(serialized) }
+      return true
     rescue 
-      puts "Could not read from file #{filename}."
+      puts "Could not save to file #{filename}."
+      return false
     end
   end
 
