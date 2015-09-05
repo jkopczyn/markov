@@ -35,6 +35,18 @@ MarkovState: tracks moment-to-moment of running generator
 	more: take chunks (default 1) and generate more from the
 		pre-existing generator
 
+
+
+
+
+
+
+
+
+
+
+
+
 Markov: stores and structures the data
 	__init__: takes n (prefix size), default 3,
 		set self.n to n, self.p to 0, self.seed to null,
@@ -81,6 +93,8 @@ Markov: stores and structures the data
 		generate a random idx up to total,
 		then index through the choices.items as (token, freq),
 		and either return token or subtract freq from idx
+
+
 
 
 Adding in anti-loop condition: the end-of-chunk check is in a different place
