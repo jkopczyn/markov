@@ -21,7 +21,7 @@ class Markov
     @final_clear_length = cln
   end
 
-  def train(training_date)
+  def train(training_data)
     @previous_tokens = []
     training_data.each do |token|
       token = token.to_sym
@@ -114,11 +114,3 @@ class Markov
     end
   end
 end
-#{a: 2, b: 4, c: 1, d: 6}
-#13, <=
-#8-13 -> 11 > 7 > 6
-#0-2 > a (3)
-#13, <
-#0-1 > a (2)
-#
-
