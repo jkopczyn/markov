@@ -51,12 +51,14 @@ class MarkovState:
         self.markov.reset(seed, prob, prefix, cln)
         
         for i in range(offset):
-            next(self.markov)
-        while not startf(next(self.markov)):
-            pass
+          next_token = next(self.markov)
+        while not startf(next_token):
+          next_token = next(self.markov)
 
         def gen(n):
-            out = []
+            if n <= 0:
+              return ""
+            out = [next_token]
             while n > 0:
                 tok = next(self.markov)
                 out.append(tok)
